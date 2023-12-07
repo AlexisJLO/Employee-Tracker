@@ -1,11 +1,5 @@
-const express = require("express");
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
-const PORT = process.env.PORT || 3001;
-const app = express();
-
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
 
 const db = mysql.createConnection(
   {
@@ -60,14 +54,121 @@ function startApp() {
           break;
 
         case "Quit":
-          console.log("Goodbye");
-          process.exit();
+          quit();
+
+        default:
+          console.log("Invalid choice, Please try again");
+          startApp();
       }
     });
 }
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+function viewAllEmployees() {
+  const query = "SELECT * FROM employee";
+  db.query(query, (err, results) => {
+    if (err) throw err;
+    console.table(results);
+    startApp();
+  });
+}
+
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "first_name",
+        message: "Enter the first name of the employee",
+      },
+      {
+        type: "input",
+        name: "last_name",
+        message: "Enter the last name of the employee",
+      },
+      {
+        type: "input",
+        name: "role_id",
+        message: "Enter the role ID of the employee",
+      },
+      {
+        type: "input",
+        name: "manager_id",
+        message: "Enter the manager ID of the employee",
+      },
+    ])
+    .then((answers) => {
+      const query = "INSERT INTO employee SET ?";
+      db.query(query, answers, (err, result) => {
+        if (err) throw err;
+        console.log(`Employee ${first_name} ${last_name} has been added`);
+        startApp();
+      });
+    });
+}
+
+function updateEmployeeRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "employee_id",
+        message: "Enter the ID of the employee whose tole you want to update:",
+      },
+      {
+        type: "input",
+        name: "new_role_id",
+        message: "Enter the new role ID for the employee: ",
+      },
+    ])
+    .then((answers) => {
+      const query = "UPDATE employee SET role_id = ? WHERE id = ?";
+      db.query(
+        query,
+        [answers.new_role_id, answers.employee_id],
+        (err, result) => {
+          if (err) throw err;
+          console.log("Employee updated");
+          startApp();
+        }
+      );
+    });
+}
+
+function viewAllRoles() {
+  const query = "SELECT * FROM role";
+  db.query(query, (err, results) => {
+    if (err) throw err;
+    console.table(results);
+    startApp();
+  });
+}
+
+function viewAllDepartments() {
+  const query = "SELECT * FROM department";
+  db.query(query, (err, results) => {
+    if (err) throw err;
+    console.table(results);
+    startApp();
+  });
+}
+
+function addDepartment() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "Enter the name of the department:",
+      },
+    ])
+    .then((answers) => {
+      const query = "INSERT INTO department SET ?";
+      db.query(query, answers, (err, results) => {
+        if (err) throw err;
+        console.log(`Department ${name} has been added`);
+        startApp();
+      });
+    });
+}
 
 startApp();
