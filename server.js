@@ -1,15 +1,22 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 
-const db = mysql.createConnection(
-  {
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database: "employeeTracker_db",
-  },
-  console.log(`Connected to the employeeTracker_db database.`)
-);
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "root",
+  database: "employeeTracker_db",
+});
+
+// Connect to the database
+db.connect((err) => {
+  if (err) {
+    console.error("Error connecting to the database:", err.message);
+    process.exit(1); // Exit with an error code
+  }
+  console.log("Connected to the database.");
+  startApp();
+});
 
 function startApp() {
   inquirer
@@ -55,10 +62,7 @@ function startApp() {
 
         case "Quit":
           quit();
-
-        default:
-          console.log("Invalid choice, Please try again");
-          startApp();
+          break;
       }
     });
 }
@@ -98,9 +102,11 @@ function addEmployee() {
     ])
     .then((answers) => {
       const query = "INSERT INTO employee SET ?";
-      db.query(query, answers, (err, result) => {
+      db.query(query, answers, (err, results) => {
         if (err) throw err;
-        console.log(`Employee ${first_name} ${last_name} has been added`);
+        console.log(
+          `Employee ${answers.first_name} ${answers.last_name} has been added`
+        );
         startApp();
       });
     });
@@ -125,7 +131,7 @@ function updateEmployeeRole() {
       db.query(
         query,
         [answers.new_role_id, answers.employee_id],
-        (err, result) => {
+        (err, results) => {
           if (err) throw err;
           console.log("Employee updated");
           startApp();
@@ -165,10 +171,12 @@ function addDepartment() {
       const query = "INSERT INTO department SET ?";
       db.query(query, answers, (err, results) => {
         if (err) throw err;
-        console.log(`Department ${name} has been added`);
+        console.log(`Department ${answers.name} has been added`);
         startApp();
       });
     });
 }
 
-startApp();
+function quit() {
+  process.exit();
+}
