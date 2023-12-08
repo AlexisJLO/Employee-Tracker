@@ -8,11 +8,10 @@ const db = mysql.createConnection({
   database: "employeeTracker_db",
 });
 
-// Connect to the database
 db.connect((err) => {
   if (err) {
     console.error("Error connecting to the database:", err.message);
-    process.exit(1); // Exit with an error code
+    process.exit(1);
   }
   console.log("Connected to the database.");
   startApp();
