@@ -39,14 +39,6 @@ function startApp() {
           viewAllEmployees();
           break;
 
-        case "Add Employee":
-          addEmployee();
-          break;
-
-        case "Update Employee Role":
-          updateEmployeeRole();
-          break;
-
         case "View All Roles":
           viewAllRoles();
           break;
@@ -57,6 +49,18 @@ function startApp() {
 
         case "Add Department":
           addDepartment();
+          break;
+
+        case "Add Role":
+          addRole();
+          break;
+
+        case "Add Employee":
+          addEmployee();
+          break;
+
+        case "Update Employee Role":
+          updateEmployeeRole();
           break;
 
         case "Quit":
@@ -132,7 +136,9 @@ function updateEmployeeRole() {
         [answers.new_role_id, answers.employee_id],
         (err, results) => {
           if (err) throw err;
-          console.log("Employee updated");
+          console.log(
+            `Employees role has been updated from ${answers.employee_id} to ${answers.new_role_id}.`
+          );
           startApp();
         }
       );
@@ -171,6 +177,35 @@ function addDepartment() {
       db.query(query, answers, (err, results) => {
         if (err) throw err;
         console.log(`Department ${answers.name} has been added`);
+        startApp();
+      });
+    });
+}
+
+function addRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "Enter name of the role",
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "Enter the salary of the role:  Ex: 200000.00",
+      },
+      {
+        type: "input",
+        name: "department",
+        message: "What department does it belong to?",
+      },
+    ])
+    .then((answers) => {
+      const query = "INSERT INTO role SET ?";
+      db.query(query, answers, (err, results) => {
+        if (err) throw err;
+        console.log(`Role ${answers.title} has been added`);
         startApp();
       });
     });
