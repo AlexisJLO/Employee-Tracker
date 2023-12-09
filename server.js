@@ -24,12 +24,13 @@ function startApp() {
       name: "Menu",
       message: "What would you like to do?",
       choices: [
+        "View All Departments",
+        "View All Roles",
         "View All Employees",
         "Add Employee",
-        "Update Employee Role",
-        "View All Roles",
-        "View All Departments",
         "Add Department",
+        "Add Role",
+        "Update Employee Role",
         "Quit",
       ],
     })
@@ -187,7 +188,7 @@ function addRole() {
     .prompt([
       {
         type: "input",
-        name: "name",
+        name: "title",
         message: "Enter name of the role",
       },
       {
@@ -197,7 +198,7 @@ function addRole() {
       },
       {
         type: "input",
-        name: "department",
+        name: "department_id",
         message: "What department does it belong to?",
       },
     ])
