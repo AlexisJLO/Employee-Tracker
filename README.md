@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Description](#description)
+- [Video](#Video)
 - [Installation](#installation)
 - [License](#license)
 - [Questions](#questions)
@@ -11,6 +12,9 @@
 
 The Employee Tracker Database is a system made to handle details about employees, departments, job roles, and how they all connect in a company. It's the backbone of the Employee Tracker, which is a computer program you can use to easily work with and organize employee information.
 
+## Video
+
+[![Video](./assets/Employee%20Tracker.PNG)](https://drive.google.com/file/d/1Rj3Q7-clRX7xoa2TTPuCfU-rWclgiRDA/view?usp=sharing)
 ## Installation
 
 1. Clone the Repository: https://github.com/AlexisJLO/Employee-Tracker
